@@ -1248,8 +1248,17 @@ _C.DEMO.COMMON_CLASS_NAMES = [
     "carry/hold (an object)",
     "walk",
     "sit",
-    "lie/sleep",
     "bend/bow (at the waist)",
+    "catch (an object)",
+    "point to (an object)",
+    "pull (an object)",
+    "give/serve (an object) to (a person)",
+    "take (an object) from (a person)",
+    "crouch/kneel",
+    "get up",
+    "close (e.g., a door, a box)",
+    "extract",
+    "watch (a person)",
 ]
 # Slow-motion rate for the visualization. The visualized portions of the
 # video will be played `_C.DEMO.SLOWMO` times slower than usual speed.
