@@ -98,6 +98,8 @@ class Predictor:
             preds = torch.tensor([])
         else:
             preds = self.model(inputs, bboxes)
+            # https://github.com/facebookresearch/SlowFast/issues/474#issuecomment-984732789
+            #preds = self.model(inputs)
 
         if self.cfg.NUM_GPUS:
             preds = preds.cpu()

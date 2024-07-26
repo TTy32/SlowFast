@@ -256,7 +256,7 @@ def set_lr(optimizer, new_lr):
         new_lr (float): the new learning rate to set.
     """
     for param_group in optimizer.param_groups:
-        param_group["lr"] = new_lr * param_group["layer_decay"]
+        param_group["lr"] = new_lr * param_group["weight_decay"] # https://github.com/facebookresearch/SlowFast/issues/654
 
 
 class LARS:
