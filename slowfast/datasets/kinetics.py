@@ -504,7 +504,7 @@ class Kinetics(torch.utils.data.Dataset):
         return mask
 
     def _frame_to_list_img(self, frames):
-        img_list = [transforms.ToPILImage()(frames[i]) for i in range(frames.size(0))]
+        img_list = [transforms.ToPillowImage()(frames[i]) for i in range(frames.size(0))]
         return img_list
 
     def _list_img_to_frames(self, img_list):

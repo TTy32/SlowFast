@@ -438,7 +438,7 @@ def aug_frame(
 
 
 def _frame_to_list_img(frames):
-    img_list = [transforms.ToPILImage()(frames[i]) for i in range(frames.size(0))]
+    img_list = [transforms.ToPillowImage()(frames[i]) for i in range(frames.size(0))]
     return img_list
 
 

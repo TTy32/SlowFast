@@ -34,7 +34,7 @@ import numpy as np
 import PIL
 from PIL import Image, ImageEnhance, ImageOps
 
-_PIL_VER = tuple([int(x) for x in PIL.__version__.split(".")[:2]])
+_Pillow_VER = tuple([int(x) for x in PIL.__version__.split(".")[:2]])
 
 _FILL = (128, 128, 128)
 
@@ -59,7 +59,7 @@ def _interpolation(kwargs):
 
 
 def _check_args_tf(kwargs):
-    if "fillcolor" in kwargs and _PIL_VER < (5, 0):
+    if "fillcolor" in kwargs and _Pillow_VER < (5, 0):
         kwargs.pop("fillcolor")
     kwargs["resample"] = _interpolation(kwargs)
 
@@ -98,9 +98,9 @@ def translate_y_abs(img, pixels, **kwargs):
 
 def rotate(img, degrees, **kwargs):
     _check_args_tf(kwargs)
-    if _PIL_VER >= (5, 2):
+    if _Pillow_VER >= (5, 2):
         return img.rotate(degrees, **kwargs)
-    elif _PIL_VER >= (5, 0):
+    elif _Pillow_VER >= (5, 0):
         w, h = img.size
         post_trans = (0, 0)
         rotn_center = (w / 2.0, h / 2.0)

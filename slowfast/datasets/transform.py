@@ -19,12 +19,12 @@ from .rand_augment import rand_augment_transform
 from .random_erasing import RandomErasing
 
 _pil_interpolation_to_str = {
-    Image.NEAREST: "PIL.Image.NEAREST",
-    Image.BILINEAR: "PIL.Image.BILINEAR",
-    Image.BICUBIC: "PIL.Image.BICUBIC",
-    Image.LANCZOS: "PIL.Image.LANCZOS",
-    Image.HAMMING: "PIL.Image.HAMMING",
-    Image.BOX: "PIL.Image.BOX",
+    Image.NEAREST: "Pillow.Image.NEAREST",
+    Image.BILINEAR: "Pillow.Image.BILINEAR",
+    Image.BICUBIC: "Pillow.Image.BICUBIC",
+    Image.LANCZOS: "Pillow.Image.LANCZOS",
+    Image.HAMMING: "Pillow.Image.HAMMING",
+    Image.BOX: "Pillow.Image.BOX",
 }
 
 
@@ -664,7 +664,7 @@ def random_sized_crop_img(
 # contents with dependency from PyTorchVideo.
 # https://github.com/facebookresearch/pytorchvideo
 class RandomResizedCropAndInterpolation:
-    """Crop the given PIL Image to random size and aspect ratio with random interpolation.
+    """Crop the given Pillow Image to random size and aspect ratio with random interpolation.
     A crop of random size (default: of 0.08 to 1.0) of the original size and a random
     aspect ratio (default: of 3/4 to 4/3) of the original aspect ratio is made. This crop
     is finally resized to given size.
@@ -673,7 +673,7 @@ class RandomResizedCropAndInterpolation:
         size: expected output size of each edge
         scale: range of size of the origin size cropped
         ratio: range of aspect ratio of the origin aspect ratio cropped
-        interpolation: Default: PIL.Image.BILINEAR
+        interpolation: Default: Pillow.Image.BILINEAR
     """
 
     def __init__(
@@ -701,7 +701,7 @@ class RandomResizedCropAndInterpolation:
     def get_params(img, scale, ratio):
         """Get parameters for ``crop`` for a random sized crop.
         Args:
-            img (PIL Image): Image to be cropped.
+            img (Pillow Image): Image to be cropped.
             scale (tuple): range of size of the origin size cropped
             ratio (tuple): range of aspect ratio of the origin aspect ratio cropped
         Returns:
@@ -741,9 +741,9 @@ class RandomResizedCropAndInterpolation:
     def __call__(self, img):
         """
         Args:
-            img (PIL Image): Image to be cropped and resized.
+            img (Pillow Image): Image to be cropped and resized.
         Returns:
-            PIL Image: Randomly cropped and resized image.
+            Pillow Image: Randomly cropped and resized image.
         """
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         if isinstance(self.interpolation, (tuple, list)):
@@ -1087,7 +1087,7 @@ def color_jitter_video_ssl(
     if moco_v2_aug:
         color_jitter = tv.transforms.Compose(
             [
-                tv.transforms.ToPILImage(),
+                tv.transforms.ToPillowImage(),
                 tv.transforms.RandomApply(
                     [
                         tv.transforms.ColorJitter(
@@ -1104,7 +1104,7 @@ def color_jitter_video_ssl(
     else:
         color_jitter = tv.transforms.Compose(
             [
-                tv.transforms.ToPILImage(),
+                tv.transforms.ToPillowImage(),
                 tv.transforms.RandomGrayscale(p=p_convert_gray),
                 tv.transforms.ColorJitter(
                     bri_con_sat[0], bri_con_sat[1], bri_con_sat[2], hue
@@ -1160,7 +1160,7 @@ class GaussianBlur:
 
 
 class GaussianBlurVideo:
-    def __init__(self, sigma_min=[0.0, 0.1], sigma_max=[0.0, 2.0], use_PIL=False):
+    def __init__(self, sigma_min=[0.0, 0.1], sigma_max=[0.0, 2.0], use_Pillow=False):
         self.sigma_min = sigma_min
         self.sigma_max = sigma_max
 
