@@ -30,6 +30,7 @@ You could follow these steps to download and preprocess the data:
 
 ```
 DATA_DIR="../../data/ava/videos"
+PARALLEL_JOBS=10
 
 if [[ ! -d "${DATA_DIR}" ]]; then
   echo "${DATA_DIR} doesn't exist. Creating it.";
@@ -38,10 +39,7 @@ fi
 
 wget https://s3.amazonaws.com/ava-dataset/annotations/ava_file_names_trainval_v2.1.txt
 
-for line in $(cat ava_file_names_trainval_v2.1.txt)
-do
-  wget https://s3.amazonaws.com/ava-dataset/trainval/$line -P ${DATA_DIR}
-done
+cat ava_file_names_trainval_v2.1.txt | xargs -n 1 -P ${PARALLEL_JOBS} -I {} wget https://s3.amazonaws.com/ava-dataset/trainval/{} -P ${DATA_DIR}
 ```
 
 2. Cut each video from its 15th to 30th minute
@@ -49,19 +47,21 @@ done
 ```
 IN_DATA_DIR="../../data/ava/videos"
 OUT_DATA_DIR="../../data/ava/videos_15min"
+PARALLEL_JOBS=10
 
 if [[ ! -d "${OUT_DATA_DIR}" ]]; then
   echo "${OUT_DATA_DIR} doesn't exist. Creating it.";
   mkdir -p ${OUT_DATA_DIR}
 fi
 
-for video in $(ls -A1 -U ${IN_DATA_DIR}/*)
-do
-  out_name="${OUT_DATA_DIR}/${video##*/}"
+ls -A1 -U ${IN_DATA_DIR}/* | parallel -j ${PARALLEL_JOBS} '
+  video={}
+  out_name="${OUT_DATA_DIR}/$(basename ${video})"
   if [ ! -f "${out_name}" ]; then
     ffmpeg -ss 900 -t 901 -i "${video}" "${out_name}"
   fi
-done
+'
+
 ```
 
 3. Extract frames
@@ -69,29 +69,37 @@ done
 ```
 IN_DATA_DIR="../../data/ava/videos_15min"
 OUT_DATA_DIR="../../data/ava/frames"
+PARALLEL_JOBS=10
 
 if [[ ! -d "${OUT_DATA_DIR}" ]]; then
   echo "${OUT_DATA_DIR} doesn't exist. Creating it.";
   mkdir -p ${OUT_DATA_DIR}
 fi
 
-for video in $(ls -A1 -U ${IN_DATA_DIR}/*)
-do
-  video_name=${video##*/}
+export OUT_DATA_DIR  # Export variable to make it available for parallel jobs
+
+process_video() {
+  local video="$1"
+  local video_name="${video##*/}"
 
   if [[ $video_name = *".webm" ]]; then
-    video_name=${video_name::-5}
+    video_name="${video_name::-5}"
   else
-    video_name=${video_name::-4}
+    video_name="${video_name::-4}"
   fi
 
-  out_video_dir=${OUT_DATA_DIR}/${video_name}/
+  local out_video_dir="${OUT_DATA_DIR}/${video_name}/"
   mkdir -p "${out_video_dir}"
 
-  out_name="${out_video_dir}/${video_name}_%06d.jpg"
+  local out_name="${out_video_dir}/${video_name}_%06d.jpg"
 
   ffmpeg -i "${video}" -r 30 -q:v 1 "${out_name}"
-done
+}
+
+export -f process_video  # Export function to make it available for parallel jobs
+
+find "${IN_DATA_DIR}" -type f | parallel -j ${PARALLEL_JOBS} process_video {}
+
 ```
 
 4. Download annotations
