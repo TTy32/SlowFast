@@ -111,7 +111,9 @@ def train_epoch(
             samples, labels = mixup_fn(inputs[0], labels)
             inputs[0] = samples
 
-        with torch.cuda.amp.autocast(enabled=cfg.TRAIN.MIXED_PRECISION):
+        #with torch.cuda.amp.autocast(enabled=cfg.TRAIN.MIXED_PRECISION):
+        with torch.amp.autocast(device_type='cuda', enabled=cfg.TRAIN.MIXED_PRECISION):
+
 
             # Explicitly declare reduction to mean.
             perform_backward = True
