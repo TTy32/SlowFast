@@ -12,6 +12,7 @@ import torch
 
 from slowfast.utils.env import pathmgr
 from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data.sampler import RandomSampler
 
 from torchvision import transforms
 
@@ -341,7 +342,9 @@ def create_sampler(dataset, shuffle, cfg):
     Returns:
         sampler (Sampler): the created sampler.
     """
-    sampler = DistributedSampler(dataset) if cfg.NUM_GPUS > 1 else None
+    #sampler = DistributedSampler(dataset) if cfg.NUM_GPUS > 1 else None
+    # https://github.com/facebookresearch/SlowFast/issues/308#issuecomment-769157942
+    sampler = DistributedSampler(dataset) if cfg.NUM_GPUS > 1 else RandomSampler(dataset)
 
     return sampler
 
