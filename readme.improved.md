@@ -1,26 +1,26 @@
-<!-- TOC -->
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [Slowfast overview](#slowfast-overview)
-    - [Slowfast Model URLs](#slowfast-model-urls)
+   * [Slowfast Model URLs](#slowfast-model-urls)
+   * [Transfer learning](#transfer-learning)
 - [Monitoring and Utilities](#monitoring-and-utilities)
-    - [GPU Utilization (htop for GPUs)](#gpu-utilization-htop-for-gpus)
-    - [Detectron2 Environment Check](#detectron2-environment-check)
+   * [GPU Utilization (htop for GPUs)](#gpu-utilization-htop-for-gpus)
+   * [Detectron2 Environment Check](#detectron2-environment-check)
 - [Setup](#setup)
-    - [❗ Determining appropiate hardware](#-determining-appropiate-hardware)
-        - [Used hardware](#used-hardware)
-    - [Install NVIDIA and CUDA Drivers](#install-nvidia-and-cuda-drivers)
-        - [Scaleway.com Ubuntu 22 Jammy Installation details](#scalewaycom-ubuntu-22-jammy-installation-details)
-        - [Verify installation / driver version](#verify-installation--driver-version)
-        - [Generic installation details (kept for reference)](#generic-installation-details-kept-for-reference)
-- [Uninstall previous drivers](#uninstall-previous-drivers)
-- [Uninstall previous drivers](#uninstall-previous-drivers)
-- [Cuda 12.1](#cuda-121)
-- [Below might be needed according to some SO posts](#below-might-be-needed-according-to-some-so-posts)
-    - [Compile FFmpeg with CUDA Support](#compile-ffmpeg-with-cuda-support)
-    - [Slowfast dependencies](#slowfast-dependencies)
+   * [❗ Determining appropiate hardware](#-determining-appropiate-hardware)
+      + [Used hardware](#used-hardware)
+   * [Install NVIDIA and CUDA Drivers](#install-nvidia-and-cuda-drivers)
+      + [Scaleway.com Ubuntu 22 Jammy Installation details](#scalewaycom-ubuntu-22-jammy-installation-details)
+      + [Verify installation / driver version](#verify-installation-driver-version)
+      + [Generic installation details (kept for reference)](#generic-installation-details-kept-for-reference)
+   * [Compile FFmpeg with CUDA Support](#compile-ffmpeg-with-cuda-support)
+   * [Slowfast dependencies](#slowfast-dependencies)
 - [Run Slowfast](#run-slowfast)
+   * [Common issues](#common-issues)
 
-<!-- /TOC -->
+
+<!-- TOC end -->
+
 
 # Slowfast overview
 
@@ -52,6 +52,33 @@ Some were hard to find, listing them here.
 * `https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_32x2_R101_50_50.pkl`
 * `https://dl.fbaipublicfiles.com/detectron2/COCODetection/faster_rcnn_R_50_FPN_3x/137849458/model_final_280758.pkl`
 * `https://dl.fbaipublicfiles.com/pyslowfast/model_zoo/ava/SLOWFAST_64x2_R101_50_50.pkl`
+
+
+## Transfer learning
+
+
+
+The SlowFast repository includes configurations and checkpoints for models that have undergone a two-stage training process (Kinetics pre-training followed by AVA fine-tuning).
+
+It is not explicitly mentioned, but the [Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md) suggests this.
+
+
+**Configuration Files**
+
+The configuration files for training on AVA often refer to using Kinetics pre-trained weights as a base. This is typically done by setting the `TRAIN.CHECKPOINT_FILE_PATH` parameter to point to a Kinetics pre-trained model:
+```yaml
+TRAIN:
+  ENABLE: True
+  DATASET: ava
+  BATCH_SIZE: 8
+  EVAL_PERIOD: 1
+  CHECKPOINT_FILE_PATH: "path_to_kinetics_pretrained_model"
+```
+See config files: https://github.com/facebookresearch/SlowFast/tree/main/configs/AVA
+
+
+
+
 
 
 
@@ -288,4 +315,29 @@ Demo:
 python tools/run_net.py --cfg c3.yaml
 ```
 
+
+## Common issues
+
+**UnboundLocalError: local variable 'inputs' referenced before assignment**
+
+```bash
+[08/07 09:36:01][INFO] train_net.py:  614: Start epoch: 1
+Traceback (most recent call last):
+  File "/home/u/SlowFast/tools/run_net.py", line 50, in <module>
+    main()
+  File "/home/u/SlowFast/tools/run_net.py", line 26, in main
+    launch_job(cfg=cfg, init_method=args.init_method, func=train)
+  File "/home/u/SlowFast/slowfast/utils/misc.py", line 421, in launch_job
+    func(cfg=cfg)
+  File "/home/u/SlowFast/tools/train_net.py", line 662, in train
+    train_epoch(
+  File "/home/u/SlowFast/tools/train_net.py", line 275, in train_epoch
+    del inputs
+UnboundLocalError: local variable 'inputs' referenced before assignment
+```
+
+Fix: the number of training videos is smaller than `batch_size`, changing `TRAIN.BATCH_SIZE` to be smaller than the number of training videos in the yaml file or config/defaults.py can solve the problem.
+
+Source: https://github.com/facebookresearch/SlowFast/issues/547#issuecomment-1541990588
+Source: https://github.com/facebookresearch/SlowFast/issues/257
 
