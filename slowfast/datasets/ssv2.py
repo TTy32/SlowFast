@@ -192,11 +192,12 @@ class Ssv2(torch.utils.data.Dataset):
             index (int): the index of the video.
         """
         short_cycle_idx = None
-        # When short cycle is used, input index is a tupple.
+        # When short cycle is used, input index is a tuple.
         if isinstance(index, tuple):
             index, self._num_yielded = index
             if self.cfg.MULTIGRID.SHORT_CYCLE:
-                index, short_cycle_idx = index
+                if isinstance(index, tuple):
+                    index, short_cycle_idx = index
 
         if self.mode in ["train", "val"]:
             # -1 indicates random sampling.
