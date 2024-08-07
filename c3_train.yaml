@@ -3,6 +3,7 @@
 #
 
 TRAIN:
+  CHECKPOINT_EPOCH_RESET: False # https://github.com/facebookresearch/SlowFast/issues/417
   ENABLE: True
   DATASET: ava
   BATCH_SIZE: 16 # around 60GB VRAM
@@ -21,19 +22,26 @@ DATA:
   TRAIN_CROP_SIZE: 224
   TEST_CROP_SIZE: 256
   INPUT_CHANNEL_NUM: [3, 3]
-  PATH_TO_DATA_DIR: ../ava2/frame_lists
+  PATH_TO_DATA_DIR: ../ava2 #/frame_lists
 DETECTION:
   ENABLE: True
   ALIGNED: True
 AVA:
   DETECTION_SCORE_THRESH: 0.8
-  # TRAIN_PREDICT_BOX_LISTS: filepaths are relative to ANNOTATION_DIR
-  TRAIN_PREDICT_BOX_LISTS: [ 
-    "./ava_train_v2.1.csv",
-    "./person_box_67091280_iou90/ava_detection_train_boxes_and_labels_include_negative_v2.1.csv",
+  TRAIN_PREDICT_BOX_LISTS: [
+    "ava_train_v2.2.csv",
+    "person_box_67091280_iou90/ava_detection_train_boxes_and_labels_include_negative_v2.2.csv",
   ]
+  TEST_PREDICT_BOX_LISTS: ["person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"]
+
+  #DETECTION_SCORE_THRESH: 0.8
+  # TRAIN_PREDICT_BOX_LISTS: filepaths are relative to ANNOTATION_DIR
+  #TRAIN_PREDICT_BOX_LISTS: [ 
+  #  "./ava_train_v2.1.csv",
+  #  "./person_box_67091280_iou90/ava_detection_train_boxes_and_labels_include_negative_v2.1.csv",
+  #]
   # TEST_PREDICT_BOX_LISTS: filepaths are relative to ANNOTATION_DIR
-  TEST_PREDICT_BOX_LISTS: ["./person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"] 
+  #TEST_PREDICT_BOX_LISTS: ["./person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"] 
   FRAME_LIST_DIR: ../ava2/frame_lists
   ANNOTATION_DIR: ../ava2/annotations
   FRAME_DIR: ../ava2/frames
