@@ -13,6 +13,7 @@ TORCH_MINOR = int(torch.__version__.split(".")[1])
 if TORCH_MAJOR >= 1 and TORCH_MINOR >= 8:
     _int_classes = int
 else:
+    _int_classes = int
     int_classes = int
     #from torch._six import int_classes as _int_classes
 
