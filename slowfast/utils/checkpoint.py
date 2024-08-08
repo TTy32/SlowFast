@@ -518,13 +518,37 @@ def load_checkpoint(
         if "epoch" in checkpoint.keys() and not epoch_reset:
             epoch = checkpoint["epoch"]
             if optimizer:
-                optimizer.load_state_dict(checkpoint["optimizer_state"])
+                try:
+                    optimizer.load_state_dict(checkpoint["optimizer_state"])
+                except ValueError as e:
+                    compare_param_groups(optimizer, checkpoint)
+                    print(f"❗❗❗ Warning: Skipping loading optimizer state due to error: {e}")
             if scaler:
                 scaler.load_state_dict(checkpoint["scaler_state"])
         else:
             epoch = -1
     return epoch
 
+
+
+def adjust_optimizer_state(optimizer, checkpoint):
+    checkpoint_state = checkpoint["optimizer_state"]
+    current_state = optimizer.state_dict()
+    
+    # Ensure param_groups match
+    current_state["param_groups"] = checkpoint_state["param_groups"]
+    
+    optimizer.load_state_dict(current_state)
+
+def compare_param_groups(optimizer, checkpoint):
+    checkpoint_param_groups = checkpoint["optimizer_state"]["param_groups"]
+    current_param_groups = optimizer.state_dict()["param_groups"]
+    
+    print("Checkpoint parameter groups:")
+    print(checkpoint_param_groups)
+    
+    print("Current parameter groups:")
+    print(current_param_groups)
 
 def sub_to_normal_bn(sd):
     """
