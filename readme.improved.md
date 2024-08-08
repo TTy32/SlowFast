@@ -63,6 +63,77 @@ The SlowFast repository includes configurations and checkpoints for models that 
 It is not explicitly mentioned, but the [Model Zoo](https://github.com/facebookresearch/SlowFast/blob/main/MODEL_ZOO.md) suggests this.
 
 
+## Breakdown of config filename meanings
+
+
+**Model Type (e.g., SLOWFAST, SLOW, I3D, C2D, X3D, MVIT, VIT, R2PLUS1D, CSN)**:
+
+- These are different models or architectures used for video classification.
+- **SLOWFAST**: Refers to the SlowFast network, which processes video at different frame rates.
+- **SLOW**: Refers to the Slow pathway of the SlowFast network.
+- **I3D**: Inflated 3D ConvNet, an architecture for video classification.
+- **C2D**: 2D convolution applied to video.
+- **X3D**: A family of efficient video models.
+- **MVIT**: Multiscale Vision Transformers.
+- **VIT**: Vision Transformers.
+- **R2PLUS1D**: 3D convolution factorized into 2D spatial and 1D temporal convolutions.
+- **CSN**: Channel-Separated Convolutional Networks.
+
+**Frame Sampling and Temporal Stride (e.g., 32x2, 8x8, 16x8, 64x2, 4x16)**:
+
+- These numbers represent the number of frames and the temporal stride between them.
+- The first number (e.g., 32, 8, 16) typically indicates the number of frames sampled.
+- The second number (e.g., 2, 8, 4, 16) indicates the temporal stride, or how far apart in time the sampled frames are.
+- For example, **32x2** means 32 frames are sampled with a temporal stride of 2.
+
+**Backbone Network (e.g., R50, R101)**:
+
+- This part specifies the backbone network used for feature extraction.
+- **R50**: ResNet-50, a ResNet with 50 layers.
+- **R101**: ResNet-101, a ResNet with 101 layers.
+
+**Additional Modifiers and Variants (e.g., SHORT, IN1K, NLN, MULTIGRID, v2.1, stepwise)**:
+
+- **SHORT**: Usually indicates a shorter training duration or a smaller dataset subset.
+- **IN1K**: Implies the model is pre-trained or tested on the ImageNet-1K dataset.
+- **NLN**: Non-local networks, a type of neural network module that can capture long-range dependencies.
+- **MULTIGRID**: Refers to multigrid training, a method to train models faster and more effectively.
+- **v2.1**: Indicates a version number of the configuration.
+- **stepwise**: Refers to stepwise training, a technique where training is done in phases with changing parameters.
+
+Here are some examples:
+
+- **SLOWFAST_32x2_R50_SHORT.yaml**:
+    - **SLOWFAST** model.
+    - 32 frames sampled with a stride of 2.
+    - **ResNet-50** backbone.
+    - Shorter training duration or smaller subset.
+
+- **SLOW_8x8_R50.yaml**:
+    - **SLOW** pathway of the SlowFast network.
+    - 8 frames sampled with a stride of 8.
+    - **ResNet-50** backbone.
+
+- **I3D_8x8_R101.yaml**:
+    - **I3D** model.
+    - 8 frames sampled with a stride of 8.
+    - **ResNet-101** backbone.
+
+- **MVIT_B_16_CONV.yaml**:
+    - **MVIT** model.
+    - B variant.
+    - 16 frames.
+    - Convolutional layers included.
+
+- **SLOWFAST_8x8_R50_stepwise.yaml**:
+    - **SLOWFAST** model.
+    - 8 frames sampled with a stride of 8.
+    - **ResNet-50** backbone.
+    - Stepwise training.
+
+
+
+
 **Configuration Files**
 
 The configuration files for training on AVA often refer to using Kinetics pre-trained weights as a base. This is typically done by setting the `TRAIN.CHECKPOINT_FILE_PATH` parameter to point to a Kinetics pre-trained model:
@@ -317,6 +388,15 @@ python tools/run_net.py --cfg c3.yaml
 
 
 ## Common issues
+
+**ValueError: loaded state dict has a different number of parameter groups**
+
+Details of this issue reported in below issues:
+https://github.com/facebookresearch/SlowFast/issues/108
+https://github.com/facebookresearch/SlowFast/issues/478
+
+I've made a change to utils/checkpoint.py that skips loading the optimizer when param groups differ. The code implies we don't strictly need the optimzer when fine-tuning.
+
 
 **UnboundLocalError: local variable 'inputs' referenced before assignment**
 
