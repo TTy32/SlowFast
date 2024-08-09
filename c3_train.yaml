@@ -10,13 +10,12 @@ TRAIN:
   EVAL_PERIOD: 5
   CHECKPOINT_PERIOD: 1
   AUTO_RESUME: True
+  # <<<<<<<<<<<<<<<< #path to pretrain model
+  CHECKPOINT_FILE_PATH: ./SLOWFAST_32x2_R101_50_50_KINETICS.pkl
   # <<<<<<<<<<<<<<<<
-  #CHECKPOINT_FILE_PATH: ./SLOWFAST_32x2_R101_50_50.pkl  #path to pretrain model
-  CHECKPOINT_FILE_PATH: ./SLOWFAST_64x2_R101_50_50.pkl  #path to pretrain model
-  # <<<<<<<<<<<<<<<<
-  CHECKPOINT_TYPE: pytorch
+  CHECKPOINT_TYPE: caffe2
 DATA:
-  NUM_FRAMES: 64
+  NUM_FRAMES: 32
   SAMPLING_RATE: 2
   TRAIN_JITTER_SCALES: [256, 320]
   TRAIN_CROP_SIZE: 224
@@ -29,7 +28,7 @@ DETECTION:
 AVA:
   DETECTION_SCORE_THRESH: 0.8
   TRAIN_PREDICT_BOX_LISTS: [
-    "ava_train_v2.2.csv",
+    #"ava_train_v2.2.csv",
     "person_box_67091280_iou90/ava_detection_train_boxes_and_labels_include_negative_v2.2.csv",
   ]
   TEST_PREDICT_BOX_LISTS: ["person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"]
@@ -69,7 +68,7 @@ BN:
   USE_PRECISE_STATS: True
   NUM_BATCHES_PRECISE: 200
 SOLVER:
-  BASE_LR: 0.1
+  BASE_LR: 0.1 # Start with a lower learning rate like 0.001 since the model is already pre-trained.
   LR_POLICY: cosine
   MAX_EPOCH: 196
   MOMENTUM: 0.9
@@ -86,7 +85,7 @@ MODEL:
   DROPOUT_RATE: 0.5
   HEAD_ACT: sigmoid
 TEST:
-  ENABLE: True
+  ENABLE: False
   DATASET: ava
   BATCH_SIZE: 8
 DATA_LOADER:
