@@ -421,3 +421,50 @@ Fix: the number of training videos is smaller than `batch_size`, changing `TRAIN
 Source: https://github.com/facebookresearch/SlowFast/issues/547#issuecomment-1541990588
 Source: https://github.com/facebookresearch/SlowFast/issues/257
 
+
+
+# Datasets
+
+## AVA
+
+```
+├── annotations                                             AVA.ANNOTATION_DIR
+│   ├── ava_action_list_v2.1_for_activitynet_2018.pbtxt
+│   ├── ava_action_list_v2.2.pbtxt
+│   ├── ava_action_list_v2.2_for_activitynet_2019.pbtxt      AVA.LABEL_MAP_FILE # not used ?
+│   ├── ava_action_list_v2.2_for_activitynet_2019.pbtxt.1
+│   ├── ava_included_timestamps_v2.2.txt
+│   ├── ava_test_excluded_timestamps_v2.1.csv
+│   ├── ava_test_excluded_timestamps_v2.2.csv
+│   ├── ava_test_predicted_boxes.csv
+│   ├── ava_test_v2.2.csv
+│   ├── ava_train_excluded_timestamps_v2.1.csv
+│   ├── ava_train_excluded_timestamps_v2.2.csv
+│   ├── ava_train_predicted_boxes.csv
+│   ├── ava_train_v2.1.csv
+│   ├── ava_train_v2.2.csv                                   AVA.TRAIN_GT_BOX_LISTS (default = "ava_train_v2.2.csv") (used for train only) # bbox for train
+│   ├── ava_val_excluded_timestamps_v2.1.csv                 AVA.EXCLUSION_FILE
+│   ├── ava_val_excluded_timestamps_v2.2.csv
+│   ├── ava_val_predicted_boxes.csv                          AVA.TEST_PREDICT_BOX_LISTS # bbox for test
+│   ├── ava_val_v2.1.csv                                     AVA.GROUNDTRUTH_FILE
+│   ├── ava_val_v2.2.csv
+│   ├── person_box_67091280_iou75
+│   ├── person_box_67091280_iou90
+│   ├── test.csv
+│   ├── train.csv
+│   └── val.csv
+├── ava_file_names_trainval_v2.1.txt
+├── frame_lists                                             AVA.FRAME_LIST_DIR
+│   ├── train.csv                                           ├── AVA.TRAIN_LISTS (default = train.csv)
+│   └── val.csv                                             └── AVA.TEST_LIST   (default = val.csv)
+└── frames                                                  AVA.FRAME_DIR
+    ├── -5KQ66BBWC4
+    ├── _-Z6wFjXtGQ
+    ├── _145Aa_xkuE
+    ├── _7oWZq_s_Sk
+    ├── _Ca3gOdOHxU
+    ├── _a9SWtcaNj8
+    ├── _eBah6c5kyA
+    ├── _ithRWANKB0
+    └── _mAfwH6i90E
+```
