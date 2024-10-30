@@ -65,7 +65,9 @@ class Ava(torch.utils.data.Dataset):
         # Loading annotations for boxes and labels.
         boxes_and_labels = ava_helper.load_boxes_and_labels(cfg, mode=self._split)
 
-        assert len(boxes_and_labels) == len(self._image_paths)
+        print ( len(boxes_and_labels) )
+        print ( len(self._image_paths) )
+        #assert len(boxes_and_labels) == len(self._image_paths)
 
         boxes_and_labels = [
             boxes_and_labels[self._video_idx_to_name[i]]

@@ -1012,7 +1012,7 @@ _C.AVA.TEST_FORCE_FLIP = False
 _C.AVA.FULL_TEST_ON_VAL = False
 
 # The name of the file to the ava label map.
-_C.AVA.LABEL_MAP_FILE = "ava_action_list_v2.2_for_activitynet_2019.pbtxt"
+_C.AVA.LABEL_MAP_FILE = "ava_action_list_v2.2.pbtxt" # "ava_action_list_v2.2_for_activitynet_2019.pbtxt"
 
 # The name of the file to the ava exclusion.
 _C.AVA.EXCLUSION_FILE = "ava_val_excluded_timestamps_v2.2.csv"

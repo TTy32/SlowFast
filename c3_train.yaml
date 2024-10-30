@@ -21,7 +21,7 @@ DATA:
   TRAIN_CROP_SIZE: 224
   TEST_CROP_SIZE: 256
   INPUT_CHANNEL_NUM: [3, 3]
-  PATH_TO_DATA_DIR: ../ava2 #/frame_lists
+  PATH_TO_DATA_DIR: ../ava3 #/frame_lists
 DETECTION:
   ENABLE: True
   ALIGNED: True
@@ -41,9 +41,9 @@ AVA:
   #]
   # TEST_PREDICT_BOX_LISTS: filepaths are relative to ANNOTATION_DIR
   #TEST_PREDICT_BOX_LISTS: ["./person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"] 
-  FRAME_LIST_DIR: ../ava2/frame_lists
-  ANNOTATION_DIR: ../ava2/annotations
-  FRAME_DIR: ../ava2/frames
+  FRAME_LIST_DIR: ../ava3/frame_lists
+  ANNOTATION_DIR: ../ava3/annotations
+  FRAME_DIR: ../ava3/frames
 SLOWFAST:
   ALPHA: 4
   BETA_INV: 8
