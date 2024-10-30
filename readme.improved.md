@@ -1,22 +1,24 @@
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [Slowfast overview](#slowfast-overview)
-   * [Slowfast Model URLs](#slowfast-model-urls)
-   * [Transfer learning](#transfer-learning)
+  - [Slowfast Model URLs](#slowfast-model-urls)
+  - [Transfer learning](#transfer-learning)
+  - [Breakdown of config filename meanings](#breakdown-of-config-filename-meanings)
 - [Monitoring and Utilities](#monitoring-and-utilities)
-   * [GPU Utilization (htop for GPUs)](#gpu-utilization-htop-for-gpus)
-   * [Detectron2 Environment Check](#detectron2-environment-check)
+  - [Detectron2 Environment Check](#detectron2-environment-check)
 - [Setup](#setup)
-   * [❗ Determining appropiate hardware](#-determining-appropiate-hardware)
-      + [Used hardware](#used-hardware)
-   * [Install NVIDIA and CUDA Drivers](#install-nvidia-and-cuda-drivers)
-      + [Scaleway.com Ubuntu 22 Jammy Installation details](#scalewaycom-ubuntu-22-jammy-installation-details)
-      + [Verify installation / driver version](#verify-installation-driver-version)
-      + [Generic installation details (kept for reference)](#generic-installation-details-kept-for-reference)
-   * [Compile FFmpeg with CUDA Support](#compile-ffmpeg-with-cuda-support)
-   * [Slowfast dependencies](#slowfast-dependencies)
+  - [❗ Determining appropiate hardware](#-determining-appropiate-hardware)
+    - [Used hardware](#used-hardware)
+  - [Install NVIDIA and CUDA Drivers](#install-nvidia-and-cuda-drivers)
+    - [Scaleway.com Ubuntu 22 Jammy Installation details](#scalewaycom-ubuntu-22-jammy-installation-details)
+    - [Verify installation / driver version](#verify-installation--driver-version)
+    - [Generic installation details (kept for reference)](#generic-installation-details-kept-for-reference)
+  - [Compile FFmpeg with CUDA Support](#compile-ffmpeg-with-cuda-support)
+  - [Slowfast dependencies](#slowfast-dependencies)
 - [Run Slowfast](#run-slowfast)
-   * [Common issues](#common-issues)
+  - [Common issues](#common-issues)
+- [Datasets](#datasets)
+  - [AVA](#ava)
 
 
 <!-- TOC end -->
@@ -157,13 +159,6 @@ See config files: https://github.com/facebookresearch/SlowFast/tree/main/configs
 
 # Monitoring and Utilities
 
-## GPU Utilization (htop for GPUs)
-
-```bash
-nvidia-smi --query-gpu=name,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5
-```
-
-
 
 ## Detectron2 Environment Check
 - To find out inconsistent CUDA versions:
@@ -171,14 +166,6 @@ nvidia-smi --query-gpu=name,utilization.gpu,utilization.memory,memory.total,memo
 ```bash
 python -m detectron2.utils.collect_env
 ```
-
-
-
-
-
-
-
-
 
 
 
@@ -431,8 +418,7 @@ Source: https://github.com/facebookresearch/SlowFast/issues/257
 ├── annotations                                             AVA.ANNOTATION_DIR
 │   ├── ava_action_list_v2.1_for_activitynet_2018.pbtxt
 │   ├── ava_action_list_v2.2.pbtxt
-│   ├── ava_action_list_v2.2_for_activitynet_2019.pbtxt      AVA.LABEL_MAP_FILE # not used ?
-│   ├── ava_action_list_v2.2_for_activitynet_2019.pbtxt.1
+│   ├── ava_action_list_v2.2_for_activitynet_2019.pbtxt      AVA.LABEL_MAP_FILE
 │   ├── ava_included_timestamps_v2.2.txt
 │   ├── ava_test_excluded_timestamps_v2.1.csv
 │   ├── ava_test_excluded_timestamps_v2.2.csv
@@ -443,16 +429,16 @@ Source: https://github.com/facebookresearch/SlowFast/issues/257
 │   ├── ava_train_predicted_boxes.csv
 │   ├── ava_train_v2.1.csv
 │   ├── ava_train_v2.2.csv                                   AVA.TRAIN_GT_BOX_LISTS (default = "ava_train_v2.2.csv") (used for train only) # bbox for train
-│   ├── ava_val_excluded_timestamps_v2.1.csv                 AVA.EXCLUSION_FILE
-│   ├── ava_val_excluded_timestamps_v2.2.csv
+│   ├── ava_val_excluded_timestamps_v2.1.csv
+│   ├── ava_val_excluded_timestamps_v2.2.csv                 AVA.EXCLUSION_FILE
 │   ├── ava_val_predicted_boxes.csv                          AVA.TEST_PREDICT_BOX_LISTS # bbox for test
-│   ├── ava_val_v2.1.csv                                     AVA.GROUNDTRUTH_FILE
-│   ├── ava_val_v2.2.csv
+│   ├── ava_val_v2.1.csv
+│   ├── ava_val_v2.2.csv                                     AVA.GROUNDTRUTH_FILE
 │   ├── person_box_67091280_iou75
 │   ├── person_box_67091280_iou90
 │   ├── test.csv
 │   ├── train.csv
-│   └── val.csv
+│   └── val.csv                                             AVA.TEST_LISTS
 ├── ava_file_names_trainval_v2.1.txt
 ├── frame_lists                                             AVA.FRAME_LIST_DIR
 │   ├── train.csv                                           ├── AVA.TRAIN_LISTS (default = train.csv)
